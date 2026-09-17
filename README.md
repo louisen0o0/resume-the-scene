@@ -1,44 +1,49 @@
 # 恢复现场吧 / Resume the Scene
 
-**让任何 AI 从项目真正停下来的地方继续，而不是重新读一遍聊天。**  
-**Let any AI continue from the real project state instead of rereading the conversation.**
+**面向 AI 协作的项目记忆：从已验证的任务状态继续，而不是重读聊天记录。**  
+**Project memory for AI work: resume from verified task state, not chat history.**
 
 ---
 
 ## 中文
 
-聊天记忆解决“我们说过什么”。知识库 / RAG 解决“资料里有什么”。
+对话记忆保存“说过什么”，知识库 / RAG 帮你找到“资料里有什么”。但项目真正中断时，丢失的往往是另一件事：
 
-**恢复现场吧**处理第三件事：
+> **现在什么是真的，为什么相信它，哪些已经做完不该重做，下一步从哪里继续。**
 
-> **这个项目现在做到哪里，为什么是这个状态，什么已经完成不能重做，下一步从哪里继续。**
+**恢复现场吧**把这类信息定义为 **Project Memory（项目记忆）**，并让它跟项目本身一起存在，而不是依赖某一次会话。
 
-它不是聊天记录，不是向量数据库，也不绑定某一家模型。
+它不要求特定模型，不要求向量数据库，也不要求保存完整聊天历史。它只给 AI 一个稳定、可校验的接手面：当前有效的项目记忆、任务状态、证据引用和 checkpoint。
 
-Claude、Codex、Gemini、本地模型或未来任何 Agent，都只是临时 Worker。项目记忆独立存在。
+### 四个变化
 
-### 四个极薄的层
+**记忆作用域 · Memory Scope（新记忆体）**  
+只声明哪些项目文件构成当前有效记忆；不复制整仓库，也不把历史全部塞回上下文。
 
-**新记忆体**：只声明哪些文件构成当前项目记忆，不复制整仓库。  
-**新结构**：给新项目标准布局，也允许旧项目原地映射，不要求迁库。  
-**新标注**：让 AI 明确知道每份文件是 Goal、State、Task、Decision、Evidence 还是 Artifact。  
-**新语言**：AI 之间不再搬运长篇解释，只交换 typed、可验证、可恢复的项目状态。
+**项目结构 · Project Layout（新结构）**  
+新项目可以直接采用标准布局；旧项目也可以原地映射，不需要为了接入而迁库。
+
+**语义标注 · Semantic Typing（新标注）**  
+让 Goal、State、Task、Decision、Evidence、Artifact 等角色显式可判，不再让 AI 靠文件名和自然语言猜文档用途。
+
+**续接语言 · Resumption Protocol（新语言）**  
+AI 不再交换一大段“背景说明”，而是交换 typed、可解析、可验证的任务状态与引用。
 
 ```text
 @task{id:#t42|goal:#g1|state:active|done:[#e69]|next:#a7}
 @msg{op:resume|task:#t42|load:[#current,#e81]|skip:[#e69]|next:#a7}
 ```
 
-这意味着一次 AI 会话可以结束、浏览器可以关闭、机器可以重启、Worker 可以更换；只要项目文件还在，下一位 AI 就能从同一个 TASK 继续。
+一次会话可以结束，机器可以重启，执行者可以更换；项目仍然保留同一个 TASK 的真实落点。
 
-### 它刻意不做什么
+### 保持很薄
 
+- 项目文件继续是真实事实源；
 - 不保存完整聊天记录；
-- 不要求把 Prompt / Response 放入统一记忆；
+- 不要求把 Prompt / Response 纳入统一记忆；
 - 不要求向量数据库；
-- 不把任何模型品牌写进核心协议；
-- 不接管你的项目文件；
-- 不为了恢复上下文而重新读取所有历史。
+- 核心协议不绑定模型品牌；
+- 恢复工作时不需要全量重放历史。
 
 ### 最小模型
 
@@ -52,50 +57,54 @@ PROJECT
   -> RESUME
 ```
 
-正文仍是事实来源；项目记忆只保存选择、类型、引用、状态和校验信息。
+Project Memory 保存的是选择、类型、引用、状态与校验信息，不替代项目正文。
 
 ### 为什么叫“恢复现场吧”
 
-真正丢失的通常不是文件，而是**工作的落点**。
+真正需要恢复的通常不是窗口，而是**工作的落点**。
 
-一个项目真正需要恢复的是：当前 Task、有效决定、已通过证据、阻塞、下一动作，以及这些事实分别来自哪里。
+当前 Task、有效决定、已通过证据、阻塞、下一动作，以及这些事实分别来自哪里——这些还在，项目现场就还在。
 
 ---
 
 ## English
 
-Conversation memory answers: **“What did we talk about?”**  
-Knowledge memory / RAG answers: **“What information exists?”**
+Conversation memory preserves **what was said**. Knowledge memory / RAG retrieves **what information is available**. But when project work is interrupted, a different kind of continuity is usually missing:
 
-**Resume the Scene** addresses a third problem:
+> **What is true now, why it is trusted, what has already been completed, and what should happen next.**
 
-> **Where is this project now, why is that state trusted, what must not be repeated, and what should happen next?**
+**Resume the Scene** treats that continuity as **Project Memory** and keeps it with the project itself instead of tying it to a single conversation.
 
-It is not a chat archive, not a vector database, and not tied to any model vendor.
+It does not require a particular model, a vector database, or a full chat archive. It gives AI workers a stable, machine-verifiable handoff surface: the active memory set, typed task state, evidence references, and a checkpoint.
 
-Claude, Codex, Gemini, local models, and future agents are temporary workers. Project memory lives independently from them.
+### Four changes
 
-### Four thin layers
+**Memory Scope**  
+Declare which project files form the active memory set. Do not copy the whole repository or replay all history into context.
 
-**Memory set** — declare only the documents that form the current project memory.  
-**Project layout** — offer a native layout while allowing existing repositories to stay where they are.  
-**Document annotation** — make Goal, State, Task, Decision, Evidence, Reference, and Artifact explicit.  
-**AI language** — exchange typed, verifiable project state instead of repeating natural-language context.
+**Project Layout**  
+Use a native layout for new projects, or map an existing repository in place without migrating it.
+
+**Semantic Typing**  
+Make Goal, State, Task, Decision, Evidence, and Artifact explicit so document roles do not have to be inferred from filenames or prose.
+
+**Resumption Protocol**  
+Exchange typed, parseable, verifiable task state and references instead of repeating long natural-language handoff notes.
 
 ```text
 @task{id:#t42|goal:#g1|state:active|done:[#e69]|next:#a7}
 @msg{op:resume|task:#t42|load:[#current,#e81]|skip:[#e69]|next:#a7}
 ```
 
-A session may die. A browser may close. A machine may restart. A worker may be replaced. The TASK can continue from the same verified state.
+A session can end. A machine can restart. A worker can change. The project can still preserve the same verified TASK handoff point.
 
-### Deliberate non-goals
+### Thin by design
 
+- project files remain the source of truth;
 - no full conversation archive;
 - no requirement to store prompts or responses;
 - no vector database requirement;
 - no model-vendor identity in the core protocol;
-- no takeover of project truth;
 - no full-history replay just to resume work.
 
 ### Minimal model
@@ -110,7 +119,13 @@ PROJECT
   -> RESUME
 ```
 
-Your project files remain the source of truth. Project memory stores only selection, type, references, state, and verification metadata.
+Project Memory stores selection, type, references, state, and verification metadata. It does not replace the project itself.
+
+### Why “Resume the Scene”?
+
+What usually gets lost is not the file. It is the **working point**.
+
+If the current Task, accepted decisions, verified evidence, blockers, next action, and their sources survive, the project can resume from the same scene.
 
 ---
 
@@ -130,9 +145,9 @@ Expected machine output / 预期机器输出：
 @msg{op:resume|task:#t0|load:[#project,#current,#protocol,...]|skip:[]|next:#a0}
 ```
 
-The repository dogfoods its own format: its current project state is already represented by `PROJECT.rsm`, `CURRENT.rsm`, and `.resume/memory.rsm`.
+The repository dogfoods its own format: its current project state is represented by `PROJECT.rsm`, `CURRENT.rsm`, and `.resume/memory.rsm`.
 
-仓库本身已经用同一套格式记录自己的项目现场：`PROJECT.rsm`、`CURRENT.rsm` 与 `.resume/memory.rsm`。
+仓库本身也使用同一套格式记录自己的项目现场：`PROJECT.rsm`、`CURRENT.rsm` 与 `.resume/memory.rsm`。
 
 License / 许可证：MIT.
 
