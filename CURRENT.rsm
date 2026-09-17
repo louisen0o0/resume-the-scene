@@ -1,2 +1,2 @@
-@task{id:#t0|goal:#g0|state:active|requires:[#project,#memory,#protocol,#e_repo,#e_ci,#e_copy]|done:[#e_repo,#e_ci,#e_copy]|next:#a1}
-@state{id:#s0|task:#t0|truth:[#project,#memory,#protocol,#license,#e_repo,#e_ci,#e_copy]|block:[]|next:#a1}
+@task{id:#t0|goal:#g0|state:active|requires:[#project,#memory,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release]|done:[#e_repo,#e_ci,#e_copy,#e_app,#e_release]|next:#a3}
+@state{id:#s0|task:#t0|truth:[#project,#memory,#protocol,#license,#e_repo,#e_ci,#e_copy,#e_app,#e_release]|block:[]|next:#a3}
