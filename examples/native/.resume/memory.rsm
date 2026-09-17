@@ -1,0 +1,6 @@
+@memory{id:#m1|mode:selected|docs:[#p1,#c1,#t1,#e1,#d1]}
+@doc{id:#p1|type:project|path:PROJECT.rsm|state:active|authority:primary}
+@doc{id:#c1|type:state|path:CURRENT.rsm|state:active|authority:primary}
+@doc{id:#t1|type:task|path:memory/tasks/T001.rsm|state:active|authority:primary}
+@doc{id:#e1|type:evidence|path:memory/evidence/E001.rsm|state:active|authority:primary}
+@doc{id:#d1|type:decision|path:memory/decisions/D001.rsm|state:active|authority:primary}

@@ -1,0 +1,35 @@
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+from .core import RSMError, checkpoint, encode_frame, resume, validate_tree
+
+
+def main() -> int:
+    try:
+        if len(sys.argv) < 2:
+            print("@result{op:cli|state:error|code:E_ARG}")
+            return 2
+        op = sys.argv[1]
+        root = Path(sys.argv[2] if len(sys.argv) > 2 else ".").resolve()
+        if op == "validate":
+            count = validate_tree(root)
+            print(encode_frame("result", {"op": "validate", "state": "pass", "count": str(count)}))
+            return 0
+        if op == "checkpoint":
+            print(checkpoint(root))
+            return 0
+        if op == "resume":
+            print(resume(root))
+            return 0
+        print("@result{op:cli|state:error|code:E_OP}")
+        return 2
+    except (RSMError, OSError) as exc:
+        code = exc.code if isinstance(exc, RSMError) else "E_IO"
+        print(f"@result{{op:cli|state:error|code:{code}}}")
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
