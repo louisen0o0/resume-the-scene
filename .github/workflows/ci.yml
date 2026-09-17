@@ -21,3 +21,5 @@ jobs:
       - run: resume-scene validate .
       - run: resume-scene checkpoint examples/native
       - run: resume-scene resume examples/native
+      - run: resume-scene checkpoint examples/handoff
+      - run: resume-scene resume examples/handoff

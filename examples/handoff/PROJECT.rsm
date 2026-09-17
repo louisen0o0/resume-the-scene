@@ -1,0 +1,3 @@
+@project{id:#p2|v:0.1|state:active|memory:#m2}
+@goal{id:#g2|state:active|accept:#a2}
+@action{id:#a2|task:#t2|op:continue|target:#artifact2|gate:none}

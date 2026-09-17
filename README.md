@@ -3,6 +3,9 @@
 **面向 AI 协作的项目记忆：从已验证的任务状态继续，而不是重读聊天记录。**  
 **Project memory for AI work: resume from verified task state, not chat history.**
 
+[![CI](https://github.com/louisen0o0/resume-the-scene/actions/workflows/ci.yml/badge.svg)](https://github.com/louisen0o0/resume-the-scene/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 ---
 
 ## 中文
@@ -144,6 +147,28 @@ Expected machine output / 预期机器输出：
 @checkpoint{id:#c_...|project:#resume_scene|task:#t0|memory:#m0|fingerprint:sha256:...}
 @msg{op:resume|task:#t0|load:[#project,#current,#protocol,...]|skip:[]|next:#a0}
 ```
+
+### 30-second handoff demo / 30 秒接手示例
+
+Run the handoff fixture as if a different AI worker is arriving after verified work has already been completed:
+
+把 `examples/handoff` 当成“上一位 AI 已完成部分工作、下一位 AI 现在接手”的现场：
+
+```bash
+resume-scene validate examples/handoff
+resume-scene checkpoint examples/handoff
+resume-scene resume examples/handoff
+```
+
+The resume packet is deterministic:
+
+```text
+@msg{op:resume|task:#t2|load:[#p2,#c2,#t2,#e2,#d2]|skip:[#e2]|next:#a2}
+```
+
+`skip:[#e2]` tells the next worker not to redo verified evidence. `next:#a2` gives the exact continuation point. No chat transcript is required.
+
+`skip:[#e2]` 表示已验证工作不要重做，`next:#a2` 指向明确的下一动作；整个接手过程不依赖上一段聊天记录。
 
 The repository dogfoods its own format: its current project state is represented by `PROJECT.rsm`, `CURRENT.rsm`, and `.resume/memory.rsm`.
 
