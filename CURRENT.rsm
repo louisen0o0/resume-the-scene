@@ -1,2 +1,2 @@
-@task{id:#t0|goal:#g0|state:active|requires:[#project,#memory,#protocol]|done:[]|next:#a0}
-@state{id:#s0|task:#t0|truth:[#project,#memory,#protocol,#license]|block:[#repo_create]|next:#a0}
+@task{id:#t0|goal:#g0|state:active|requires:[#project,#memory,#protocol,#e_repo,#e_ci]|done:[#e_repo,#e_ci]|next:#a1}
+@state{id:#s0|task:#t0|truth:[#project,#memory,#protocol,#license,#e_repo,#e_ci]|block:[]|next:#a1}

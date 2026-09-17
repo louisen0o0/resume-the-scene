@@ -1,3 +1,5 @@
 @project{id:#resume_scene|v:0.1|state:active|memory:#m0}
-@goal{id:#g0|state:active|accept:#a0}
+@goal{id:#g0|state:active|accept:#a2}
 @action{id:#a0|task:#t0|op:ship_v0_1|target:#repo|gate:publish}
+@action{id:#a1|task:#t0|op:prepare_application|target:#oss_program|gate:none}
+@action{id:#a2|task:#t0|op:submit_application|target:#oss_program|gate:publish}
