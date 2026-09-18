@@ -1,0 +1,4 @@
+@result{op:producer_consumer_handoff|state:pass|producer:opaque|consumer:opaque|fixture:#handoff}
+@result{op:session_restart_handoff|state:pass|producer:opaque|consumer:opaque|fixture:#handoff}
+@result{op:machine_restart_handoff|state:pass|producer:opaque|consumer:opaque|fixture:#handoff}
+@result{op:incompatibility_encoding|state:pass|record:evidence|identity:external}

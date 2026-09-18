@@ -48,6 +48,13 @@ class CoreTest(unittest.TestCase):
         self.assertIn("skip:[#e1]", msg)
         self.assertIn("next:#a1", msg)
 
+    def test_handoff_expected_outputs(self):
+        root = Path(__file__).resolve().parents[1] / "examples" / "handoff"
+        expected_checkpoint = (root / "expected" / "checkpoint.rsm").read_text(encoding="utf-8").strip()
+        expected_resume = (root / "expected" / "resume.rsm").read_text(encoding="utf-8").strip()
+        self.assertEqual(checkpoint(root), expected_checkpoint)
+        self.assertEqual(resume(root), expected_resume)
+
     def test_parent_escape_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)
