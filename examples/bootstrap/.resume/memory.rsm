@@ -1,0 +1,4 @@
+@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol]}
+@doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}
+@doc{id:#current|type:state|path:CURRENT.rsm|state:active|authority:primary}
+@doc{id:#protocol|type:rule|path:protocol/core.rsm|state:active|authority:primary}

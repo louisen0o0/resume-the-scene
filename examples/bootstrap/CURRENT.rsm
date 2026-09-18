@@ -1,0 +1,2 @@
+@task{id:#t0|goal:#g0|state:active|requires:[#project,#current,#protocol]|done:[]|next:#a0}
+@state{id:#s0|task:#t0|truth:[#project,#current,#protocol]|block:[]|next:#a0}

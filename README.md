@@ -134,19 +134,49 @@ If the current Task, accepted decisions, verified evidence, blockers, next actio
 
 ## Quick start / 快速开始
 
+From a cloned repository, no editable install is required for the read-only handoff path:
+
+从源码仓库直接接手时，不需要先做 editable install：
+
+```bash
+./resume-scene validate .
+./resume-scene handoff .
+```
+
+Installed package path / 安装后也可以：
+
 ```bash
 python -m pip install -e .
 resume-scene validate .
-resume-scene checkpoint .
-resume-scene resume .
+resume-scene handoff .
 ```
+
+### v0.3 working branch: bootstrap a fresh repository / 初始化一个新仓库
+
+The `v0.3-expansion` branch adds a fail-closed `init` path so a new repository does not need hand-authored RSM files before the first validation. It refuses to overwrite any existing target file.
+
+`v0.3-expansion` 工作分支新增了 fail-closed 的 `init`：新仓库第一次接入时不用手写 RSM 文件；如果目标文件已经存在，它会拒绝覆盖。
+
+```bash
+./resume-scene init /path/to/project
+./resume-scene validate /path/to/project
+./resume-scene handoff /path/to/project
+```
+
+If the package is already installed, the same commands work without the leading `./`.
 
 Expected machine output / 预期机器输出：
 
 ```text
+@doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}
+...
 @checkpoint{id:#c_...|project:#resume_scene|task:#t0|memory:#m0|fingerprint:sha256:...}
 @msg{op:resume|task:#t0|load:[#project,#current,#protocol,...]|skip:[]|next:#a0}
 ```
+
+`handoff` is only a convenience stream: selected `@doc` mappings + the existing deterministic checkpoint + resume packet. It adds no new core frame type.
+
+`handoff` 只是便利输出：选中的 `@doc` 映射 + 现有 checkpoint + resume；不会增加新的核心 frame 类型。
 
 ### 30-second handoff demo / 30 秒接手示例
 
@@ -191,3 +221,17 @@ License / 许可证：MIT.
 - 路径越界、符号链接逃逸、重复文档 ID 与重复记忆项均按 fail-closed 处理。
 
 Mapped-layout example / 原地映射示例：`examples/mapped`.
+
+Additional handoff fixtures / 更多接手示例：
+
+- `examples/decision-handoff` — an active decision survives a worker change;
+- `examples/interrupted` — verified work is skipped and one precise next action survives an interruption.
+
+Integration and adoption notes / 接入与采用说明：
+
+- editing the five pieces of current state: `docs/EDITING_STATE.md`
+- adopting an existing repository: `docs/MIGRATING_EXISTING_REPO.md`
+- GitHub Actions: `docs/integrations/GITHUB_ACTIONS.md`
+- pre-commit: `docs/integrations/PRE_COMMIT.md`
+- generic worker handoff: `docs/integrations/WORKER_HANDOFF.md`
+- copyable vendor-neutral worker prompt: `docs/integrations/WORKER_PROMPT.md`

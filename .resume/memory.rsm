@@ -1,7 +1,8 @@
-@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#example_task,#example_evidence,#example_decision]}
+@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol,#d_v03_scope,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#e_v03_bootstrap,#e_v03_handoff,#e_v03_coldstart_fix1,#e_v03_coldstart_canary2]}
 @doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}
 @doc{id:#current|type:state|path:CURRENT.rsm|state:active|authority:primary}
 @doc{id:#protocol|type:rule|path:protocol/core.rsm|state:active|authority:primary}
+@doc{id:#d_v03_scope|type:decision|path:decisions/D001.rsm|state:active|authority:primary}
 @doc{id:#e_repo|type:evidence|path:evidence/E001.rsm|state:active|authority:primary}
 @doc{id:#e_ci|type:evidence|path:evidence/E002.rsm|state:active|authority:primary}
 @doc{id:#e_copy|type:evidence|path:evidence/E003.rsm|state:active|authority:primary}
@@ -10,6 +11,7 @@
 @doc{id:#e_dev|type:evidence|path:evidence/E006.rsm|state:active|authority:primary}
 @doc{id:#e_v02|type:evidence|path:evidence/E007.rsm|state:active|authority:primary}
 @doc{id:#e_x|type:evidence|path:evidence/E008.rsm|state:active|authority:primary}
-@doc{id:#example_task|type:task|path:examples/native/memory/tasks/T001.rsm|state:active|authority:example}
-@doc{id:#example_evidence|type:evidence|path:examples/native/memory/evidence/E001.rsm|state:active|authority:example}
-@doc{id:#example_decision|type:decision|path:examples/native/memory/decisions/D001.rsm|state:active|authority:example}
+@doc{id:#e_v03_bootstrap|type:evidence|path:evidence/E009.rsm|state:active|authority:primary}
+@doc{id:#e_v03_handoff|type:evidence|path:evidence/E010.rsm|state:active|authority:primary}
+@doc{id:#e_v03_coldstart_fix1|type:evidence|path:evidence/E011.rsm|state:active|authority:primary}
+@doc{id:#e_v03_coldstart_canary2|type:evidence|path:evidence/E012.rsm|state:active|authority:primary}

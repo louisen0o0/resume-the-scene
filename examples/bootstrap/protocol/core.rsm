@@ -1,0 +1,10 @@
+@schema{id:#rsm_core|v:0.1|frames:[project,memory,doc,goal,task,state,decision,evidence,action,checkpoint,msg]}
+@rule{id:#r1|op:select_memory|in:[doc]|out:memory}
+@rule{id:#r2|op:annotate_doc|in:[id,type,path,state]|out:doc}
+@rule{id:#r3|op:advance_task|in:[goal,state,evidence,decision]|out:[task,action]}
+@rule{id:#r4|op:checkpoint|in:[memory,task,hash]|out:checkpoint}
+@rule{id:#r5|op:resume|in:[checkpoint,task,memory]|out:msg}
+@rule{id:#r6|op:content_by_ref|in:[ref]|out:content}
+@rule{id:#r7|op:no_vendor_core|in:[actor]|out:opaque_actor}
+@rule{id:#r8|op:no_chat_authority|in:[conversation]|out:reference_only}
+@rule{id:#r9|op:no_history_replay|in:[checkpoint]|out:delta_or_selected}

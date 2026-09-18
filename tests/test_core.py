@@ -2,7 +2,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from resume_scene.core import RSMError, checkpoint, parse_frame, resume, validate_tree
+from resume_scene.core import RSMError, checkpoint, handoff, init_project, parse_frame, resume, selected_docs, validate_tree
 
 
 class CoreTest(unittest.TestCase):
@@ -37,6 +37,51 @@ class CoreTest(unittest.TestCase):
             parse_frame("@goal{id:#g1|state:active}")
         self.assertEqual(exc.exception.code, "E_REQUIRED")
 
+    def test_init_empty_repo_roundtrip(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "new-project"
+            self.assertEqual(init_project(root), 4)
+            self.assertEqual(validate_tree(root), 4)
+            cp1 = checkpoint(root)
+            cp2 = checkpoint(root)
+            self.assertEqual(cp1, cp2)
+            msg = resume(root)
+            self.assertIn("load:[#project,#current,#protocol]", msg)
+            self.assertIn("skip:[]", msg)
+            self.assertIn("next:#a0", msg)
+
+    def test_init_existing_repo_preserves_unrelated_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            readme = root / "README.md"
+            readme.write_text("existing repository\n", encoding="utf-8")
+            self.assertEqual(init_project(root), 4)
+            self.assertEqual(readme.read_text(encoding="utf-8"), "existing repository\n")
+            self.assertEqual(validate_tree(root), 4)
+
+    def test_init_refuses_parent_file_collision_before_mutation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "protocol").write_text("occupied\n", encoding="utf-8")
+            with self.assertRaises(RSMError) as exc:
+                init_project(root)
+            self.assertEqual(exc.exception.code, "E_INIT_LAYOUT")
+            self.assertFalse((root / ".resume").exists())
+            self.assertFalse((root / "PROJECT.rsm").exists())
+            self.assertFalse((root / "CURRENT.rsm").exists())
+
+    def test_init_refuses_existing_target_before_mutation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            original = "do-not-overwrite\n"
+            (root / "PROJECT.rsm").write_text(original, encoding="utf-8")
+            with self.assertRaises(RSMError) as exc:
+                init_project(root)
+            self.assertEqual(exc.exception.code, "E_INIT_EXISTS")
+            self.assertEqual((root / "PROJECT.rsm").read_text(encoding="utf-8"), original)
+            self.assertFalse((root / ".resume").exists())
+            self.assertFalse((root / "protocol").exists())
+
     def test_example_tree(self):
         root = Path(__file__).resolve().parents[1] / "examples" / "native"
         self.assertGreaterEqual(validate_tree(root), 6)
@@ -48,12 +93,59 @@ class CoreTest(unittest.TestCase):
         self.assertIn("skip:[#e1]", msg)
         self.assertIn("next:#a1", msg)
 
+    def test_handoff_stream_matches_golden_fixtures(self):
+        base = Path(__file__).resolve().parents[1] / "examples"
+        for name in ["bootstrap", "handoff", "decision-handoff", "interrupted"]:
+            with self.subTest(name=name):
+                root = base / name
+                expected = (root / "expected" / "handoff.rsm").read_text(encoding="utf-8").strip().splitlines()
+                self.assertEqual(handoff(root), expected)
+
+    def test_selected_docs_preserve_memory_order(self):
+        root = Path(__file__).resolve().parents[1] / "examples" / "handoff"
+        frames = selected_docs(root)
+        self.assertEqual(len(frames), 5)
+        self.assertTrue(frames[0].startswith("@doc{id:#p2|"))
+        self.assertTrue(frames[1].startswith("@doc{id:#c2|"))
+        self.assertTrue(frames[2].startswith("@doc{id:#t2|"))
+        self.assertIn("path:memory/evidence/E001.rsm", frames[3])
+        self.assertIn("path:memory/decisions/D001.rsm", frames[4])
+
     def test_handoff_expected_outputs(self):
         root = Path(__file__).resolve().parents[1] / "examples" / "handoff"
         expected_checkpoint = (root / "expected" / "checkpoint.rsm").read_text(encoding="utf-8").strip()
         expected_resume = (root / "expected" / "resume.rsm").read_text(encoding="utf-8").strip()
         self.assertEqual(checkpoint(root), expected_checkpoint)
         self.assertEqual(resume(root), expected_resume)
+
+    def test_bootstrap_fixture_expected_outputs(self):
+        root = Path(__file__).resolve().parents[1] / "examples" / "bootstrap"
+        expected_checkpoint = (root / "expected" / "checkpoint.rsm").read_text(encoding="utf-8").strip()
+        expected_resume = (root / "expected" / "resume.rsm").read_text(encoding="utf-8").strip()
+        self.assertEqual(checkpoint(root), expected_checkpoint)
+        self.assertEqual(resume(root), expected_resume)
+        self.assertIn("load:[#project,#current,#protocol]", expected_resume)
+        self.assertIn("skip:[]", expected_resume)
+        self.assertIn("next:#a0", expected_resume)
+
+    def test_decision_handoff_expected_outputs(self):
+        root = Path(__file__).resolve().parents[1] / "examples" / "decision-handoff"
+        expected_checkpoint = (root / "expected" / "checkpoint.rsm").read_text(encoding="utf-8").strip()
+        expected_resume = (root / "expected" / "resume.rsm").read_text(encoding="utf-8").strip()
+        self.assertEqual(checkpoint(root), expected_checkpoint)
+        self.assertEqual(resume(root), expected_resume)
+        self.assertIn("load:[#p4,#s4,#e4,#d4]", expected_resume)
+        self.assertIn("skip:[#e4]", expected_resume)
+        self.assertIn("next:#a4", expected_resume)
+
+    def test_interrupted_expected_outputs(self):
+        root = Path(__file__).resolve().parents[1] / "examples" / "interrupted"
+        expected_checkpoint = (root / "expected" / "checkpoint.rsm").read_text(encoding="utf-8").strip()
+        expected_resume = (root / "expected" / "resume.rsm").read_text(encoding="utf-8").strip()
+        self.assertEqual(checkpoint(root), expected_checkpoint)
+        self.assertEqual(resume(root), expected_resume)
+        self.assertIn("skip:[#e5]", expected_resume)
+        self.assertIn("next:#a5", expected_resume)
 
     def test_mapped_layout_without_root_reorganization(self):
         root = Path(__file__).resolve().parents[1] / "examples" / "mapped"

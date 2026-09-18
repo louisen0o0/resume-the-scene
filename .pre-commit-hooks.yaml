@@ -1,0 +1,5 @@
+- id: resume-scene-validate
+  name: validate Resume the Scene project memory
+  entry: resume-scene validate .
+  language: python
+  pass_filenames: false

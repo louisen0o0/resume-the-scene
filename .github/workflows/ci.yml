@@ -18,8 +18,26 @@ jobs:
       - run: python -m pip install -U pip
       - run: python -m pip install -e .
       - run: python -m unittest discover -s tests -v
+      - run: ./resume-scene handoff examples/handoff
       - run: resume-scene validate .
       - run: resume-scene checkpoint examples/native
       - run: resume-scene resume examples/native
       - run: resume-scene checkpoint examples/handoff
+      - run: resume-scene docs examples/handoff
       - run: resume-scene resume examples/handoff
+      - run: resume-scene handoff examples/handoff
+      - run: resume-scene checkpoint examples/bootstrap
+      - run: resume-scene resume examples/bootstrap
+      - run: resume-scene checkpoint examples/decision-handoff
+      - run: resume-scene resume examples/decision-handoff
+      - run: resume-scene checkpoint examples/interrupted
+      - run: resume-scene resume examples/interrupted
+      - name: Fresh repository bootstrap
+        run: |
+          tmp=$(mktemp -d)
+          resume-scene init "$tmp/demo"
+          resume-scene validate "$tmp/demo"
+          resume-scene docs "$tmp/demo"
+          resume-scene checkpoint "$tmp/demo"
+          resume-scene resume "$tmp/demo"
+          resume-scene handoff "$tmp/demo"

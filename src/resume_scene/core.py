@@ -205,6 +205,65 @@ def load_project(root: Path):
     return project, task, memory, docs
 
 
+
+def init_project(root: Path) -> int:
+    root = root.resolve()
+    if root.exists() and not root.is_dir():
+        raise RSMError("E_INIT_ROOT")
+
+    files = {
+        root / "PROJECT.rsm": (
+            "@project{id:#project|v:0.1|state:active|memory:#m0}\n"
+            "@goal{id:#g0|state:active|accept:#a0}\n"
+            "@action{id:#a0|task:#t0|op:continue|target:#project|gate:none}\n"
+        ),
+        root / "CURRENT.rsm": (
+            "@task{id:#t0|goal:#g0|state:active|requires:[#project,#current,#protocol]|done:[]|next:#a0}\n"
+            "@state{id:#s0|task:#t0|truth:[#project,#current,#protocol]|block:[]|next:#a0}\n"
+        ),
+        root / ".resume" / "memory.rsm": (
+            "@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol]}\n"
+            "@doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}\n"
+            "@doc{id:#current|type:state|path:CURRENT.rsm|state:active|authority:primary}\n"
+            "@doc{id:#protocol|type:rule|path:protocol/core.rsm|state:active|authority:primary}\n"
+        ),
+        root / "protocol" / "core.rsm": (
+            "@schema{id:#rsm_core|v:0.1|frames:[project,memory,doc,goal,task,state,decision,evidence,action,checkpoint,msg]}\n"
+            "@rule{id:#r1|op:select_memory|in:[doc]|out:memory}\n"
+            "@rule{id:#r2|op:annotate_doc|in:[id,type,path,state]|out:doc}\n"
+            "@rule{id:#r3|op:advance_task|in:[goal,state,evidence,decision]|out:[task,action]}\n"
+            "@rule{id:#r4|op:checkpoint|in:[memory,task,hash]|out:checkpoint}\n"
+            "@rule{id:#r5|op:resume|in:[checkpoint,task,memory]|out:msg}\n"
+            "@rule{id:#r6|op:content_by_ref|in:[ref]|out:content}\n"
+            "@rule{id:#r7|op:no_vendor_core|in:[actor]|out:opaque_actor}\n"
+            "@rule{id:#r8|op:no_chat_authority|in:[conversation]|out:reference_only}\n"
+            "@rule{id:#r9|op:no_history_replay|in:[checkpoint]|out:delta_or_selected}\n"
+        ),
+    }
+
+    for path in files:
+        if path.exists() or path.is_symlink():
+            raise RSMError("E_INIT_EXISTS")
+
+    for directory in (root / ".resume", root / "protocol"):
+        if directory.exists() and not directory.is_dir():
+            raise RSMError("E_INIT_LAYOUT")
+
+    root.mkdir(parents=True, exist_ok=True)
+    (root / ".resume").mkdir(parents=True, exist_ok=True)
+    (root / "protocol").mkdir(parents=True, exist_ok=True)
+    for path, content in files.items():
+        path.write_text(content, encoding="utf-8")
+
+    validate_tree(root)
+    return len(files)
+
+def selected_docs(root: Path) -> list[str]:
+    _, _, memory, docs = load_project(root)
+    by_id = {str(doc["id"]): doc for doc in docs}
+    return [encode_frame("doc", by_id[str(doc_id)]) for doc_id in memory["docs"]]
+
+
 def checkpoint(root: Path) -> str:
     project, task, memory, docs = load_project(root)
     digest = hashlib.sha256()
@@ -229,6 +288,11 @@ def checkpoint(root: Path) -> str:
             "fingerprint": fp,
         },
     )
+
+
+def handoff(root: Path) -> list[str]:
+    validate_tree(root)
+    return [*selected_docs(root), checkpoint(root), resume(root)]
 
 
 def resume(root: Path) -> str:
