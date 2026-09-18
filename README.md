@@ -176,6 +176,18 @@ The repository dogfoods its own format: its current project state is represented
 
 License / 许可证：MIT.
 
-## v0.1
+## v0.2
 
-`v0.1` is intentionally small: deterministic frames, validation, project-memory selection, checkpoint fingerprints, and resumable TASK state.
+`v0.2` keeps the core thin while making it safer and easier to adopt in real repositories:
+
+- existing repositories can map project, state, task, evidence, and decision files in place through `.resume/memory.rsm`;
+- worker-neutral handoff fixtures pin exact checkpoint and resume outputs;
+- document paths, symlink escapes, duplicate document IDs, and duplicate memory entries now fail closed.
+
+`v0.2` 保持薄核心，同时补上真实仓库接入与安全边界：
+
+- 旧项目可通过 `.resume/memory.rsm` 原地映射 Project / State / Task / Evidence / Decision，无需迁目录；
+- 跨 AI 接手示例固定了 checkpoint 与 resume 的精确机器输出；
+- 路径越界、符号链接逃逸、重复文档 ID 与重复记忆项均按 fail-closed 处理。
+
+Mapped-layout example / 原地映射示例：`examples/mapped`.
