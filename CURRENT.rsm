@@ -1,2 +1,2 @@
-@task{id:#t0|goal:#g0|state:active|requires:[#project,#memory,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x]|done:[#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x]|next:#a5}
-@state{id:#s0|task:#t0|truth:[#project,#memory,#protocol,#license,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x]|block:[]|next:#a5}
+@task{id:#t0|goal:#g0|state:active|requires:[#project,#memory,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#e_v03_bootstrap,#e_v03_handoff]|done:[#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#e_v03_bootstrap,#e_v03_handoff]|next:#a5}
+@state{id:#s0|task:#t0|truth:[#project,#memory,#protocol,#license,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#e_v03_bootstrap,#e_v03_handoff]|block:[]|next:#a5}
