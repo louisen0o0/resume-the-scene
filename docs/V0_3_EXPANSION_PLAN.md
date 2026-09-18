@@ -1,62 +1,68 @@
 # v0.3 Expansion Plan
 
-Status: active working plan — implementation pass 2 complete
-Branch: `v0.3-expansion`
+Status: COMPLETE / RELEASED
+Release: `v0.3.0`
+Release URL: https://github.com/louisen0o0/resume-the-scene/releases/tag/v0.3.0
 
-The project is still new, so lack of public feedback is not treated as a blocking signal. Feedback collection stays passive while v0.3 focuses on widening the usable surface without making the core protocol heavy.
+The project is still new, so lack of public feedback is not treated as a blocking signal. Feedback collection is passive. v0.3 widened the usable surface without making the core protocol heavier.
 
-## Priority order
+## Completed scope
 
-### 1. Make first use possible without hand-authoring RSM files — DONE
+### 1. First use without hand-authoring RSM files
 
-Add a fail-closed `resume-scene init <repo>` path for a new repository.
+DONE.
 
-Acceptance:
-- creates only the minimal Project / Current / Memory / Protocol files;
-- refuses to overwrite any existing target file;
-- the generated repository immediately passes `validate`;
-- `checkpoint` is deterministic;
-- `resume` returns a valid `load / skip / next` packet.
+`resume-scene init <repo>` creates the minimal Project / Current / Memory / Protocol surface, validates immediately, and refuses to overwrite existing target files.
 
-Why first:
-Current quick start assumes the memory files already exist. That is acceptable for the author, but it is avoidable setup friction for a new user.
+### 2. Real handoff fixtures
 
-### 2. Add more real handoff fixtures — DONE FOR PASS 1
+DONE.
 
-Expand examples around distinct continuation problems rather than more protocol concepts:
+Deterministic fixtures now cover:
 - fresh repository bootstrap;
 - existing repository mapped in place;
 - verified work that must be skipped;
-- active decision that must survive worker change;
-- interrupted task with a precise next action.
+- an active decision that survives worker change;
+- an interrupted task with a precise next action.
 
-Acceptance:
-Every fixture pins exact checkpoint/resume output and remains worker-neutral.
+### 3. Adoption surfaces without new protocol layers
 
-### 3. Add adoption surfaces, not new protocol layers — DONE FOR PASS 1
+DONE.
 
-Prepare:
-- GitHub Actions validation example;
-- pre-commit example;
-- concise worker integration notes for common AI coding tools while keeping the core vendor-neutral.
+Included:
+- GitHub Actions validation;
+- pre-commit validation;
+- generic worker handoff notes;
+- vendor-neutral worker prompt;
+- state-editing guidance;
+- existing-repository adoption guidance.
 
-These belong in docs/adapters, not the protocol core.
+### 4. Cold-start usability
 
-### 4. Prepare install/distribution improvements — LOCAL SMOKE PASS
+DONE.
 
-Prepare packaging and release artifacts so a stranger does not need an editable clone forever.
+A repository-root `./resume-scene` wrapper allows a fresh worker to validate and hand off from a clone without an editable install.
 
-External publication (for example a package registry release) remains a separate publish gate.
+Cold-start Canary 2 recovered the active task, completed work, trusted evidence, active decision, and exact next action from the repository itself without relying on chat history.
 
-## Explicit non-goals for this expansion
+### 5. Release verification
+
+DONE.
+
+- PR #4 merged to `main`;
+- GitHub CI passed on Python 3.11, 3.12, and 3.13;
+- package metadata finalized to `0.3.0`;
+- tag and GitHub Release `v0.3.0` published;
+- a fresh public clone from tag `v0.3.0` passed `./resume-scene validate .` and `./resume-scene handoff .`.
+
+## Explicit non-goals retained
 
 - no vector database;
 - no chat archive;
 - no autonomous background memory daemon;
 - no model-vendor identity in the core protocol;
-- no speculative schema expansion without a concrete handoff case;
-- no waiting for public feedback before continuing basic usability work.
+- no speculative schema expansion without a concrete handoff case.
 
 ## Current next action
 
-Verify the current handoff surface with a fresh worker from only the repository root and a read-only continuation request. Fix only concrete friction found in that cold start. Do not add new protocol concepts unless the failure requires them. External publication remains gated.
+None. v0.3 is complete. Keep feedback passive; start a new task only when a concrete new requirement or real-world failure justifies it.

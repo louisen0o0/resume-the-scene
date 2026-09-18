@@ -1,4 +1,4 @@
-@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol,#d_v03_scope,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#e_v03_bootstrap,#e_v03_handoff,#e_v03_coldstart_fix1,#e_v03_coldstart_canary2]}
+@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol,#d_v03_scope,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#e_v03_bootstrap,#e_v03_handoff,#e_v03_coldstart_fix1,#e_v03_coldstart_canary2,#e_v03_release]}
 @doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}
 @doc{id:#current|type:state|path:CURRENT.rsm|state:active|authority:primary}
 @doc{id:#protocol|type:rule|path:protocol/core.rsm|state:active|authority:primary}
@@ -15,3 +15,4 @@
 @doc{id:#e_v03_handoff|type:evidence|path:evidence/E010.rsm|state:active|authority:primary}
 @doc{id:#e_v03_coldstart_fix1|type:evidence|path:evidence/E011.rsm|state:active|authority:primary}
 @doc{id:#e_v03_coldstart_canary2|type:evidence|path:evidence/E012.rsm|state:active|authority:primary}
+@doc{id:#e_v03_release|type:evidence|path:evidence/E013.rsm|state:active|authority:primary}

@@ -1,5 +1,5 @@
-@project{id:#resume_scene|v:0.3-dev0|state:active|memory:#m0}
-@goal{id:#g0|state:active|accept:#a5}
+@project{id:#resume_scene|v:0.3.0|state:active|memory:#m0}
+@goal{id:#g0|state:complete|accept:#a8}
 @action{id:#a0|task:#t0|op:ship_v0_1|target:#repo|gate:publish}
 @action{id:#a1|task:#t0|op:prepare_application|target:#oss_program|gate:none}
 @action{id:#a2|task:#t0|op:submit_application|target:#oss_program|gate:publish}
@@ -8,3 +8,4 @@
 @action{id:#a5|task:#t0|op:expand_v0_3|target:#repo|gate:none}
 @action{id:#a6|task:#t0|op:run_coldstart_canary_2|target:#repo|gate:none}
 @action{id:#a7|task:#t0|op:prepare_v0_3_release_candidate|target:#repo|gate:none}
+@action{id:#a8|task:#t0|op:release_v0_3|target:#repo|gate:publish}
