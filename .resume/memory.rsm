@@ -1,4 +1,4 @@
-@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#example_task,#example_evidence,#example_decision]}
+@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#example_task,#example_evidence,#example_decision]}
 @doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}
 @doc{id:#current|type:state|path:CURRENT.rsm|state:active|authority:primary}
 @doc{id:#protocol|type:rule|path:protocol/core.rsm|state:active|authority:primary}
@@ -8,6 +8,7 @@
 @doc{id:#e_app|type:evidence|path:evidence/E004.rsm|state:active|authority:primary}
 @doc{id:#e_release|type:evidence|path:evidence/E005.rsm|state:active|authority:primary}
 @doc{id:#e_dev|type:evidence|path:evidence/E006.rsm|state:active|authority:primary}
+@doc{id:#e_v02|type:evidence|path:evidence/E007.rsm|state:active|authority:primary}
 @doc{id:#example_task|type:task|path:examples/native/memory/tasks/T001.rsm|state:active|authority:example}
 @doc{id:#example_evidence|type:evidence|path:examples/native/memory/evidence/E001.rsm|state:active|authority:example}
 @doc{id:#example_decision|type:decision|path:examples/native/memory/decisions/D001.rsm|state:active|authority:example}
