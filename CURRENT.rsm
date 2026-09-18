@@ -1,2 +1,2 @@
-@task{id:#t0|goal:#g0|state:active|requires:[#project,#memory,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02]|done:[#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02]|next:#a4}
-@state{id:#s0|task:#t0|truth:[#project,#memory,#protocol,#license,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02]|block:[]|next:#a4}
+@task{id:#t0|goal:#g0|state:active|requires:[#project,#memory,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x]|done:[#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x]|next:#a4}
+@state{id:#s0|task:#t0|truth:[#project,#memory,#protocol,#license,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x]|block:[]|next:#a4}
