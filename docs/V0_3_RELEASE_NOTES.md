@@ -1,6 +1,6 @@
-# v0.3 release notes — draft
+# v0.3.0 release notes
 
-Not published. Working branch only. Package metadata is `0.3.0.dev0` until the external release gate is opened.
+Released after the v0.3 expansion branch passed local validation, GitHub CI on Python 3.11/3.12/3.13, and a second cold-start handoff canary with a fresh worker.
 
 ## What changes
 
@@ -24,11 +24,19 @@ New deterministic fixtures cover:
 
 ### Adoption surfaces
 
-The repository now includes working notes for:
+The repository includes working notes for:
 
 - GitHub Actions validation;
 - pre-commit validation;
-- generic worker handoff integration without adding vendor identity to the core protocol.
+- generic worker handoff integration without adding vendor identity to the core protocol;
+- editing the five pieces of current project state;
+- adopting an existing repository in place.
+
+### Cold-start usability
+
+A repository-root `./resume-scene` wrapper allows a fresh worker to validate and hand off from a clone without an editable install.
+
+A second fresh-worker canary successfully recovered the active task, completed work, trusted evidence, active decision, and exact next action from the project itself without relying on chat history.
 
 ### Packaging smoke-tested
 
@@ -38,7 +46,7 @@ A clean virtual environment can build/install the package and run:
 resume-scene --help
 resume-scene init <repo>
 resume-scene validate <repo>
-resume-scene resume <repo>
+resume-scene handoff <repo>
 ```
 
 ## What does not change
@@ -51,11 +59,4 @@ The core is still deliberately small:
 - no model-vendor identity in core state;
 - no speculative schema layer added for this release.
 
-## Release gates still open
-
-Before any public v0.3 tag/package release:
-
-1. final branch audit;
-2. CI pass on the public branch/PR;
-3. version bump and changelog finalization;
-4. explicit external publish decision.
+`protocol/core.rsm` remains unchanged from v0.2.
