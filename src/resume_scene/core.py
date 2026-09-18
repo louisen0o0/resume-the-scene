@@ -121,16 +121,53 @@ def _one(frames, kind: str):
     return matches[0]
 
 
+def _resolve_inside(root: Path, raw_path: object) -> Path:
+    if not isinstance(raw_path, str) or "\x00" in raw_path:
+        raise RSMError("E_DOC_PATH")
+    relative = Path(raw_path)
+    if relative.is_absolute():
+        raise RSMError("E_DOC_PATH")
+    root_resolved = root.resolve()
+    candidate = (root_resolved / relative).resolve()
+    try:
+        candidate.relative_to(root_resolved)
+    except ValueError as exc:
+        raise RSMError("E_DOC_PATH") from exc
+    return candidate
+
+
+def _require_file(root: Path, raw_path: object) -> Path:
+    path = _resolve_inside(root, raw_path)
+    if not path.is_file():
+        raise RSMError("E_DOC_MISSING")
+    return path
+
+
 def load_project(root: Path):
-    project = _one(parse_file(root / "PROJECT.rsm"), "project")
-    current_frames = parse_file(root / "CURRENT.rsm")
+    project = _one(parse_file(_require_file(root, "PROJECT.rsm")), "project")
+    current_frames = parse_file(_require_file(root, "CURRENT.rsm"))
     task = _one(current_frames, "task")
-    memory_frames = parse_file(root / ".resume" / "memory.rsm")
+    memory_frames = parse_file(_require_file(root, ".resume/memory.rsm"))
     memory = _one(memory_frames, "memory")
     docs = [f for k, f in memory_frames if k == "doc"]
-    ids = {d["id"] for d in docs}
-    if set(memory["docs"]) != ids:
+
+    memory_docs = memory["docs"]
+    if not isinstance(memory_docs, list) or not all(isinstance(x, str) for x in memory_docs):
         raise RSMError("E_MEMORY_SET")
+    if len(memory_docs) != len(set(memory_docs)):
+        raise RSMError("E_MEMORY_DUP")
+
+    doc_ids = [d["id"] for d in docs]
+    if not all(isinstance(x, str) for x in doc_ids):
+        raise RSMError("E_MEMORY_SET")
+    if len(doc_ids) != len(set(doc_ids)):
+        raise RSMError("E_DOC_DUP")
+    if set(memory_docs) != set(doc_ids):
+        raise RSMError("E_MEMORY_SET")
+
+    for doc in docs:
+        _require_file(root, doc["path"])
+
     return project, task, memory, docs
 
 
@@ -138,9 +175,7 @@ def checkpoint(root: Path) -> str:
     project, task, memory, docs = load_project(root)
     digest = hashlib.sha256()
     for doc in sorted(docs, key=lambda x: str(x["id"])):
-        path = root / str(doc["path"])
-        if not path.is_file():
-            raise RSMError("E_DOC_MISSING")
+        path = _require_file(root, doc["path"])
         file_hash = hashlib.sha256(path.read_bytes()).hexdigest()
         digest.update(str(doc["id"]).encode())
         digest.update(b"\0")
@@ -177,8 +212,22 @@ def resume(root: Path) -> str:
 
 
 def validate_tree(root: Path) -> int:
+    root_resolved = root.resolve()
     count = 0
     for path in sorted(root.rglob("*.rsm")):
-        parse_file(path)
+        resolved = path.resolve()
+        try:
+            resolved.relative_to(root_resolved)
+        except ValueError as exc:
+            raise RSMError("E_DOC_PATH") from exc
+        parse_file(resolved)
         count += 1
+
+    core_paths = (
+        root / "PROJECT.rsm",
+        root / "CURRENT.rsm",
+        root / ".resume" / "memory.rsm",
+    )
+    if any(path.exists() or path.is_symlink() for path in core_paths):
+        load_project(root)
     return count
