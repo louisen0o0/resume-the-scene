@@ -214,8 +214,11 @@ Additional handoff fixtures / 更多接手示例：
 - `examples/decision-handoff` — an active decision survives a worker change;
 - `examples/interrupted` — verified work is skipped and one precise next action survives an interruption.
 
-Integration notes / 接入说明：
+Integration and adoption notes / 接入与采用说明：
 
+- editing the five pieces of current state: `docs/EDITING_STATE.md`
+- adopting an existing repository: `docs/MIGRATING_EXISTING_REPO.md`
 - GitHub Actions: `docs/integrations/GITHUB_ACTIONS.md`
 - pre-commit: `docs/integrations/PRE_COMMIT.md`
 - generic worker handoff: `docs/integrations/WORKER_HANDOFF.md`
+- copyable vendor-neutral worker prompt: `docs/integrations/WORKER_PROMPT.md`

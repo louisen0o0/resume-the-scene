@@ -1,6 +1,6 @@
 # v0.3 Expansion Plan
 
-Status: active working plan — implementation pass 1 complete
+Status: active working plan — implementation pass 2 complete
 Branch: `v0.3-expansion`
 
 The project is still new, so lack of public feedback is not treated as a blocking signal. Feedback collection stays passive while v0.3 focuses on widening the usable surface without making the core protocol heavy.
@@ -59,4 +59,4 @@ External publication (for example a package registry release) remains a separate
 
 ## Current next action
 
-Run a full branch audit: all tests, all fixtures, root validation, install/build smoke, diff review, and protocol-thinness review. Fix only concrete defects found. Keep external publication gated.
+Keep expanding only along verified usability seams. Pass 2 added a deterministic `handoff` stream, CLI tests, state-editing/adoption docs, and clean-install packaging smoke. Next: run a final thin-core audit and stop adding protocol concepts unless a concrete cold-start failure demands them. External publication remains gated.

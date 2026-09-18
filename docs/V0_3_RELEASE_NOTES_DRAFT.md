@@ -1,6 +1,6 @@
 # v0.3 release notes — draft
 
-Not published. Working branch only.
+Not published. Working branch only. Package metadata is `0.3.0.dev0` until the external release gate is opened.
 
 ## What changes
 
