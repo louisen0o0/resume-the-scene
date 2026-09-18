@@ -1,0 +1,7 @@
+@doc{id:#p2|type:project|path:PROJECT.rsm|state:active|authority:primary}
+@doc{id:#c2|type:state|path:CURRENT.rsm|state:active|authority:primary}
+@doc{id:#t2|type:task|path:memory/tasks/T001.rsm|state:active|authority:primary}
+@doc{id:#e2|type:evidence|path:memory/evidence/E001.rsm|state:active|authority:primary}
+@doc{id:#d2|type:decision|path:memory/decisions/D001.rsm|state:active|authority:primary}
+@checkpoint{id:#c_70fd5287cd63|project:#p2|task:#t2|memory:#m2|fingerprint:sha256:70fd5287cd631c4a0bc3ba523ed672315abe2e1cc0b96e4b59cc15e40365d94b}
+@msg{op:resume|task:#t2|load:[#p2,#c2,#t2,#e2,#d2]|skip:[#e2]|next:#a2}

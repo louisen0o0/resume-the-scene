@@ -1,0 +1,5 @@
+@doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}
+@doc{id:#current|type:state|path:CURRENT.rsm|state:active|authority:primary}
+@doc{id:#protocol|type:rule|path:protocol/core.rsm|state:active|authority:primary}
+@checkpoint{id:#c_1fdfefd6db95|project:#project|task:#t0|memory:#m0|fingerprint:sha256:1fdfefd6db959623316f282bc49410c2c5516cc044580da65f32ca4859dd2c9a}
+@msg{op:resume|task:#t0|load:[#project,#current,#protocol]|skip:[]|next:#a0}

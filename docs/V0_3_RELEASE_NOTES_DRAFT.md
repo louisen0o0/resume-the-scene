@@ -10,6 +10,10 @@ Not published. Working branch only.
 
 It is fail-closed on existing target files: if one of the files it owns already exists, it refuses to overwrite anything.
 
+### One-command handoff stream
+
+`resume-scene handoff <repo>` emits the selected `@doc` ID-to-path mappings, deterministic checkpoint, and resume packet in one machine-readable stream. It reuses existing core frame types.
+
 ### More continuation fixtures
 
 New deterministic fixtures cover:

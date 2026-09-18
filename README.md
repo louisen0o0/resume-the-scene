@@ -137,8 +137,7 @@ If the current Task, accepted decisions, verified evidence, blockers, next actio
 ```bash
 python -m pip install -e .
 resume-scene validate .
-resume-scene checkpoint .
-resume-scene resume .
+resume-scene handoff .
 ```
 
 ### v0.3 working branch: bootstrap a fresh repository / 初始化一个新仓库
@@ -150,16 +149,21 @@ The `v0.3-expansion` branch adds a fail-closed `init` path so a new repository d
 ```bash
 resume-scene init /path/to/project
 resume-scene validate /path/to/project
-resume-scene checkpoint /path/to/project
-resume-scene resume /path/to/project
+resume-scene handoff /path/to/project
 ```
 
 Expected machine output / 预期机器输出：
 
 ```text
+@doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}
+...
 @checkpoint{id:#c_...|project:#resume_scene|task:#t0|memory:#m0|fingerprint:sha256:...}
 @msg{op:resume|task:#t0|load:[#project,#current,#protocol,...]|skip:[]|next:#a0}
 ```
+
+`handoff` is only a convenience stream: selected `@doc` mappings + the existing deterministic checkpoint + resume packet. It adds no new core frame type.
+
+`handoff` 只是便利输出：选中的 `@doc` 映射 + 现有 checkpoint + resume；不会增加新的核心 frame 类型。
 
 ### 30-second handoff demo / 30 秒接手示例
 

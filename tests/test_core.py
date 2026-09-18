@@ -2,7 +2,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from resume_scene.core import RSMError, checkpoint, init_project, parse_frame, resume, validate_tree
+from resume_scene.core import RSMError, checkpoint, handoff, init_project, parse_frame, resume, selected_docs, validate_tree
 
 
 class CoreTest(unittest.TestCase):
@@ -92,6 +92,24 @@ class CoreTest(unittest.TestCase):
         self.assertTrue(msg.startswith("@msg{op:resume|task:#t1"))
         self.assertIn("skip:[#e1]", msg)
         self.assertIn("next:#a1", msg)
+
+    def test_handoff_stream_matches_golden_fixtures(self):
+        base = Path(__file__).resolve().parents[1] / "examples"
+        for name in ["bootstrap", "handoff", "decision-handoff", "interrupted"]:
+            with self.subTest(name=name):
+                root = base / name
+                expected = (root / "expected" / "handoff.rsm").read_text(encoding="utf-8").strip().splitlines()
+                self.assertEqual(handoff(root), expected)
+
+    def test_selected_docs_preserve_memory_order(self):
+        root = Path(__file__).resolve().parents[1] / "examples" / "handoff"
+        frames = selected_docs(root)
+        self.assertEqual(len(frames), 5)
+        self.assertTrue(frames[0].startswith("@doc{id:#p2|"))
+        self.assertTrue(frames[1].startswith("@doc{id:#c2|"))
+        self.assertTrue(frames[2].startswith("@doc{id:#t2|"))
+        self.assertIn("path:memory/evidence/E001.rsm", frames[3])
+        self.assertIn("path:memory/decisions/D001.rsm", frames[4])
 
     def test_handoff_expected_outputs(self):
         root = Path(__file__).resolve().parents[1] / "examples" / "handoff"

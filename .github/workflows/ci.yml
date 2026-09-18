@@ -22,7 +22,9 @@ jobs:
       - run: resume-scene checkpoint examples/native
       - run: resume-scene resume examples/native
       - run: resume-scene checkpoint examples/handoff
+      - run: resume-scene docs examples/handoff
       - run: resume-scene resume examples/handoff
+      - run: resume-scene handoff examples/handoff
       - run: resume-scene checkpoint examples/bootstrap
       - run: resume-scene resume examples/bootstrap
       - run: resume-scene checkpoint examples/decision-handoff
@@ -34,5 +36,7 @@ jobs:
           tmp=$(mktemp -d)
           resume-scene init "$tmp/demo"
           resume-scene validate "$tmp/demo"
+          resume-scene docs "$tmp/demo"
           resume-scene checkpoint "$tmp/demo"
           resume-scene resume "$tmp/demo"
+          resume-scene handoff "$tmp/demo"

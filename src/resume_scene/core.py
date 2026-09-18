@@ -258,6 +258,12 @@ def init_project(root: Path) -> int:
     validate_tree(root)
     return len(files)
 
+def selected_docs(root: Path) -> list[str]:
+    _, _, memory, docs = load_project(root)
+    by_id = {str(doc["id"]): doc for doc in docs}
+    return [encode_frame("doc", by_id[str(doc_id)]) for doc_id in memory["docs"]]
+
+
 def checkpoint(root: Path) -> str:
     project, task, memory, docs = load_project(root)
     digest = hashlib.sha256()
@@ -282,6 +288,11 @@ def checkpoint(root: Path) -> str:
             "fingerprint": fp,
         },
     )
+
+
+def handoff(root: Path) -> list[str]:
+    validate_tree(root)
+    return [*selected_docs(root), checkpoint(root), resume(root)]
 
 
 def resume(root: Path) -> str:
