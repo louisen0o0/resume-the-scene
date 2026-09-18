@@ -23,3 +23,16 @@ jobs:
       - run: resume-scene resume examples/native
       - run: resume-scene checkpoint examples/handoff
       - run: resume-scene resume examples/handoff
+      - run: resume-scene checkpoint examples/bootstrap
+      - run: resume-scene resume examples/bootstrap
+      - run: resume-scene checkpoint examples/decision-handoff
+      - run: resume-scene resume examples/decision-handoff
+      - run: resume-scene checkpoint examples/interrupted
+      - run: resume-scene resume examples/interrupted
+      - name: Fresh repository bootstrap
+        run: |
+          tmp=$(mktemp -d)
+          resume-scene init "$tmp/demo"
+          resume-scene validate "$tmp/demo"
+          resume-scene checkpoint "$tmp/demo"
+          resume-scene resume "$tmp/demo"

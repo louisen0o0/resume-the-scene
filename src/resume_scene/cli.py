@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from .core import RSMError, checkpoint, encode_frame, resume, validate_tree
+from .core import RSMError, checkpoint, encode_frame, init_project, resume, validate_tree
 
 
 def main() -> int:
@@ -12,7 +12,21 @@ def main() -> int:
             print("@result{op:cli|state:error|code:E_ARG}")
             return 2
         op = sys.argv[1]
+        if op in {"help", "--help", "-h"}:
+            print(
+                "usage: resume-scene <init|validate|checkpoint|resume> [project]\n"
+                "\n"
+                "init        create the minimal project-memory files without overwriting targets\n"
+                "validate    validate RSM files and selected project memory\n"
+                "checkpoint  emit a deterministic checkpoint fingerprint\n"
+                "resume      emit the selected load / skip / next handoff packet"
+            )
+            return 0
         root = Path(sys.argv[2] if len(sys.argv) > 2 else ".").resolve()
+        if op == "init":
+            count = init_project(root)
+            print(encode_frame("result", {"op": "init", "state": "pass", "count": str(count)}))
+            return 0
         if op == "validate":
             count = validate_tree(root)
             print(encode_frame("result", {"op": "validate", "state": "pass", "count": str(count)}))

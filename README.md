@@ -141,6 +141,19 @@ resume-scene checkpoint .
 resume-scene resume .
 ```
 
+### v0.3 working branch: bootstrap a fresh repository / 初始化一个新仓库
+
+The `v0.3-expansion` branch adds a fail-closed `init` path so a new repository does not need hand-authored RSM files before the first validation. It refuses to overwrite any existing target file.
+
+`v0.3-expansion` 工作分支新增了 fail-closed 的 `init`：新仓库第一次接入时不用手写 RSM 文件；如果目标文件已经存在，它会拒绝覆盖。
+
+```bash
+resume-scene init /path/to/project
+resume-scene validate /path/to/project
+resume-scene checkpoint /path/to/project
+resume-scene resume /path/to/project
+```
+
 Expected machine output / 预期机器输出：
 
 ```text
@@ -191,3 +204,14 @@ License / 许可证：MIT.
 - 路径越界、符号链接逃逸、重复文档 ID 与重复记忆项均按 fail-closed 处理。
 
 Mapped-layout example / 原地映射示例：`examples/mapped`.
+
+Additional handoff fixtures / 更多接手示例：
+
+- `examples/decision-handoff` — an active decision survives a worker change;
+- `examples/interrupted` — verified work is skipped and one precise next action survives an interruption.
+
+Integration notes / 接入说明：
+
+- GitHub Actions: `docs/integrations/GITHUB_ACTIONS.md`
+- pre-commit: `docs/integrations/PRE_COMMIT.md`
+- generic worker handoff: `docs/integrations/WORKER_HANDOFF.md`

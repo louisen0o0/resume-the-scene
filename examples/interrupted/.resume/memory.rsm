@@ -1,0 +1,4 @@
+@memory{id:#m5|mode:selected|docs:[#p5,#s5,#e5]}
+@doc{id:#p5|type:project|path:PROJECT.rsm|state:active|authority:primary}
+@doc{id:#s5|type:state|path:CURRENT.rsm|state:active|authority:primary}
+@doc{id:#e5|type:evidence|path:memory/evidence/E001.rsm|state:active|authority:primary}
