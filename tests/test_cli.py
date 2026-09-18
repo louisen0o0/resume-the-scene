@@ -46,6 +46,20 @@ class CliTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertEqual(result.stdout.strip(), "@result{op:cli|state:error|code:E_INIT_EXISTS}")
 
+    def test_repo_root_wrapper_needs_no_editable_install(self):
+        repo = Path(__file__).resolve().parents[1]
+        result = subprocess.run(
+            [str(repo / "resume-scene"), "handoff", str(repo / "examples" / "handoff")],
+            cwd=repo,
+            text=True,
+            capture_output=True,
+            check=False,
+            env={"PATH": str(Path(sys.executable).parent) + ":" + __import__("os").environ.get("PATH", "")},
+        )
+        self.assertEqual(result.returncode, 0)
+        expected = (repo / "examples" / "handoff" / "expected" / "handoff.rsm").read_text(encoding="utf-8").strip()
+        self.assertEqual(result.stdout.strip(), expected)
+
     def test_cli_handoff_matches_fixture(self):
         root = Path(__file__).resolve().parents[1] / "examples" / "handoff"
         expected = (root / "expected" / "handoff.rsm").read_text(encoding="utf-8").strip()

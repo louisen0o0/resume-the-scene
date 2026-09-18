@@ -59,4 +59,4 @@ External publication (for example a package registry release) remains a separate
 
 ## Current next action
 
-Keep expanding only along verified usability seams. Pass 2 added a deterministic `handoff` stream, CLI tests, state-editing/adoption docs, and clean-install packaging smoke. Next: run a final thin-core audit and stop adding protocol concepts unless a concrete cold-start failure demands them. External publication remains gated.
+Verify the current handoff surface with a fresh worker from only the repository root and a read-only continuation request. Fix only concrete friction found in that cold start. Do not add new protocol concepts unless the failure requires them. External publication remains gated.

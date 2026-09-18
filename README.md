@@ -134,6 +134,17 @@ If the current Task, accepted decisions, verified evidence, blockers, next actio
 
 ## Quick start / 快速开始
 
+From a cloned repository, no editable install is required for the read-only handoff path:
+
+从源码仓库直接接手时，不需要先做 editable install：
+
+```bash
+./resume-scene validate .
+./resume-scene handoff .
+```
+
+Installed package path / 安装后也可以：
+
 ```bash
 python -m pip install -e .
 resume-scene validate .
@@ -147,10 +158,12 @@ The `v0.3-expansion` branch adds a fail-closed `init` path so a new repository d
 `v0.3-expansion` 工作分支新增了 fail-closed 的 `init`：新仓库第一次接入时不用手写 RSM 文件；如果目标文件已经存在，它会拒绝覆盖。
 
 ```bash
-resume-scene init /path/to/project
-resume-scene validate /path/to/project
-resume-scene handoff /path/to/project
+./resume-scene init /path/to/project
+./resume-scene validate /path/to/project
+./resume-scene handoff /path/to/project
 ```
+
+If the package is already installed, the same commands work without the leading `./`.
 
 Expected machine output / 预期机器输出：
 

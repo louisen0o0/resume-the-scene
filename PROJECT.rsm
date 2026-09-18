@@ -1,4 +1,4 @@
-@project{id:#resume_scene|v:0.2|state:active|memory:#m0}
+@project{id:#resume_scene|v:0.3-dev0|state:active|memory:#m0}
 @goal{id:#g0|state:active|accept:#a5}
 @action{id:#a0|task:#t0|op:ship_v0_1|target:#repo|gate:publish}
 @action{id:#a1|task:#t0|op:prepare_application|target:#oss_program|gate:none}

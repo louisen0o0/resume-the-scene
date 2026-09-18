@@ -1,7 +1,8 @@
-@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#e_v03_bootstrap,#e_v03_handoff]}
+@memory{id:#m0|mode:selected|docs:[#project,#current,#protocol,#d_v03_scope,#e_repo,#e_ci,#e_copy,#e_app,#e_release,#e_dev,#e_v02,#e_x,#e_v03_bootstrap,#e_v03_handoff]}
 @doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}
 @doc{id:#current|type:state|path:CURRENT.rsm|state:active|authority:primary}
 @doc{id:#protocol|type:rule|path:protocol/core.rsm|state:active|authority:primary}
+@doc{id:#d_v03_scope|type:decision|path:decisions/D001.rsm|state:active|authority:primary}
 @doc{id:#e_repo|type:evidence|path:evidence/E001.rsm|state:active|authority:primary}
 @doc{id:#e_ci|type:evidence|path:evidence/E002.rsm|state:active|authority:primary}
 @doc{id:#e_copy|type:evidence|path:evidence/E003.rsm|state:active|authority:primary}
