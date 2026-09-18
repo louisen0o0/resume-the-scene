@@ -1,0 +1,6 @@
+@memory{id:#m3|mode:selected|docs:[#p3,#s3,#t3,#e3,#d3]}
+@doc{id:#p3|type:project|path:legacy/spec/project.rsm|state:active|authority:primary}
+@doc{id:#s3|type:state|path:legacy/runtime/state.rsm|state:active|authority:primary}
+@doc{id:#t3|type:task|path:legacy/tasks/T042.rsm|state:active|authority:primary}
+@doc{id:#e3|type:evidence|path:legacy/evidence/E042.rsm|state:active|authority:primary}
+@doc{id:#d3|type:decision|path:legacy/decisions/D042.rsm|state:active|authority:primary}

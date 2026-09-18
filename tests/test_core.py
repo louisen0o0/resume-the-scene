@@ -55,6 +55,51 @@ class CoreTest(unittest.TestCase):
         self.assertEqual(checkpoint(root), expected_checkpoint)
         self.assertEqual(resume(root), expected_resume)
 
+    def test_mapped_layout_without_root_reorganization(self):
+        root = Path(__file__).resolve().parents[1] / "examples" / "mapped"
+        self.assertFalse((root / "PROJECT.rsm").exists())
+        self.assertFalse((root / "CURRENT.rsm").exists())
+        self.assertGreaterEqual(validate_tree(root), 6)
+        cp1 = checkpoint(root)
+        cp2 = checkpoint(root)
+        self.assertEqual(cp1, cp2)
+        msg = resume(root)
+        self.assertIn("task:#t3", msg)
+        self.assertIn("load:[#p3,#s3,#t3,#e3,#d3]", msg)
+        self.assertIn("skip:[#e3]", msg)
+        self.assertIn("next:#a3", msg)
+
+    def test_duplicate_primary_authority_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write_project(
+                root,
+                ["#project", "#project2", "#current"],
+                [
+                    "@doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}",
+                    "@doc{id:#project2|type:project|path:PROJECT.rsm|state:active|authority:primary}",
+                    "@doc{id:#current|type:state|path:CURRENT.rsm|state:active|authority:primary}",
+                ],
+            )
+            with self.assertRaises(RSMError) as exc:
+                validate_tree(root)
+            self.assertEqual(exc.exception.code, "E_AUTHORITY")
+
+    def test_missing_primary_authority_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write_project(
+                root,
+                ["#project", "#current"],
+                [
+                    "@doc{id:#project|type:project|path:PROJECT.rsm|state:active|authority:primary}",
+                    "@doc{id:#current|type:artifact|path:CURRENT.rsm|state:active|authority:primary}",
+                ],
+            )
+            with self.assertRaises(RSMError) as exc:
+                validate_tree(root)
+            self.assertEqual(exc.exception.code, "E_AUTHORITY")
+
     def test_parent_escape_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             base = Path(tmp)

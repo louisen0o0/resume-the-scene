@@ -143,10 +143,29 @@ def _require_file(root: Path, raw_path: object) -> Path:
     return path
 
 
+def _primary_doc(docs, doc_type: str):
+    matches = [
+        doc
+        for doc in docs
+        if doc.get("type") == doc_type and doc.get("authority") == "primary"
+    ]
+    if len(matches) != 1:
+        raise RSMError("E_AUTHORITY")
+    return matches[0]
+
+
+def _optional_primary_doc(docs, doc_type: str):
+    matches = [
+        doc
+        for doc in docs
+        if doc.get("type") == doc_type and doc.get("authority") == "primary"
+    ]
+    if len(matches) > 1:
+        raise RSMError("E_AUTHORITY")
+    return matches[0] if matches else None
+
+
 def load_project(root: Path):
-    project = _one(parse_file(_require_file(root, "PROJECT.rsm")), "project")
-    current_frames = parse_file(_require_file(root, "CURRENT.rsm"))
-    task = _one(current_frames, "task")
     memory_frames = parse_file(_require_file(root, ".resume/memory.rsm"))
     memory = _one(memory_frames, "memory")
     docs = [f for k, f in memory_frames if k == "doc"]
@@ -167,6 +186,21 @@ def load_project(root: Path):
 
     for doc in docs:
         _require_file(root, doc["path"])
+
+    project_doc = _primary_doc(docs, "project")
+    state_doc = _primary_doc(docs, "state")
+    task_doc = _optional_primary_doc(docs, "task")
+
+    project = _one(parse_file(_require_file(root, project_doc["path"])), "project")
+    state_frames = parse_file(_require_file(root, state_doc["path"]))
+    _one(state_frames, "state")
+    if task_doc is None:
+        task = _one(state_frames, "task")
+    else:
+        task = _one(parse_file(_require_file(root, task_doc["path"])), "task")
+
+    if project["memory"] != memory["id"]:
+        raise RSMError("E_MEMORY_SET")
 
     return project, task, memory, docs
 
